@@ -35,6 +35,25 @@ async function run() {
             res.send(data);
         });
 
+        app.post("/partners", async (req, res) => {
+            try {
+                const newPartner = req.body;
+                const result = await partnerCollection.insertOne(newPartner);
+                res.send({
+                    success: true,
+                    message: "Profile created successfully",
+                    insertedId: result.insertedId
+                });
+            } catch (error) {
+                res.status(500).send({
+                    success: false,
+                    message: "Failed to create profile",
+                    error: error.message
+                });
+            }
+        });
+
+
         app.get("/partners/:id", async (req, res) => {
             const id = req.params.id;
             const partner = await partnerCollection.findOne({ _id: new ObjectId(id) });
